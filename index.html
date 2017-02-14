@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" ng-app="mzBrowser" ng-controller="FrontController" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="mzBrowser" ng-controller="FrontController" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="mzBrowser" ng-controller="FrontController" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="mzBrowser" ng-controller="FrontController" class="no-js" xmlns="http://www.w3.org/1999/html">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Przeglądarka zdjęć</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body style="padding: 15px;">
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <ul class="nav navbar-nav">
+            <li ng-class="getHTMLClass('/grid')"><a href="#/grid">Instagram: Grid</a></li>
+            <li ng-class="getHTMLClass('/list')"><a href="#/list">Instagram: Lista</a></li>
+        </ul>
+
+        <div class="collapse navbar-collapse">
+            <form class="navbar-form navbar-left" role="search" name="tagForm">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1" style="font-size: 1.4em;">#</span>
+                    <input class="form-control" placeholder="Podaj tag zdjęcia" type="text" name="searchTag"
+                           ng-enter="searchByTag()"
+                           ng-model="tag" required ng-minlength="3" ng-pattern="/^\s*\w*\s*$/i">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="searchByTag()">Szukaj!</button>
+                    </span>
+                </div>
+
+                <span class="alert alert-danger" style="padding: 10px;"
+                      ng-show="tagForm.searchTag.$error.required">Tag jest wymagany</span>
+                <span class="alert alert-danger" style="padding: 10px;"
+                      ng-show="tagForm.searchTag.$error.pattern">Tylko pojedyńcze słowo</span>
+                <span class="alert alert-danger" style="padding: 10px;"
+                      ng-show="tagForm.searchTag.$error.minlength">Minimum 3 znaki</span>
+
+                <button type="button" class="btn btn-warning" ng-click="clearView()">Czyść widok</button>
+                <button type="button" ng-model="button" ng-disabled="moreIsDisabled" class="btn btn-success"
+                        ng-click="getMore()">Pobierz więcej
+                </button>
+                <br>
+                <input type="text" style="width: 400px;" class="form-control input-sm" ng-model="accessToken"
+                       placeholder="podaj access_token" name="accessToken" ng-enter="searchByTag()">
+            </form>
+
+            <p class="navbar-text">
+                <input ng-model="counter.photos" size="3" readonly>
+                zdjęć
+            </p>
+
+            <p class="navbar-text navbar-right">Autor:
+                <a href="mailto:apsikz@gmail.com" class="navbar-link">Marek Zielonkowski</a></p>
+        </div>
+    </div>
+</nav>
+<code>
+    <a href="https://instagramtoken.com/">https://instagramtoken.com/</a>
+    <br>
+    <br>
+    https://api.instagram.com/oauth/authorize/?client_id=e7446359d4d942dfafe4937c021c5c35&redirect_uri=http://pro-glossa.com/error/&response_type=code&scope=public_content
+    <br>
+    <br>
+    https://api.instagram.com/oauth/authorize/?client_id=e7446359d4d942dfafe4937c021c5c35&redirect_uri=http://pro-glossa.com/error/&response_type=code
+    <br>
+    <br>
+    code=9d86f3195ff84361bdaaf3f5ff40c8f1
+    <br>
+    <br>
+    curl -F 'client_id=e7446359d4d942dfafe4937c021c5c35' -F 'client_secret=b6eb2388d2a349a0ab83b1070f02b6cd' -F 'grant_type=authorization_code' -F
+    'redirect_uri=http://pro-glossa.com/error/' -F 'code=9d86f3195ff84361bdaaf3f5ff40c8f1' https://api.instagram.com/oauth/access_token
+    <br>
+    <br>
+    {
+    "access_token": "2051206158.e744635.e0bac9ff782b4fb8a17a7e31667af23b",
+    "user": {
+    "profile_picture": "https://scontent.cdninstagram.com/t51.2885-19/11111431_1574900209425841_1269107871_a.jpg",
+    "website": "", "id": "2051206158", "bio": "", "username": "aperceptio", "full_name": ""}}
+</code>
+<div class="container" ng-view ng-init='start()'>
+
+
+</div>
+
+<!--
+images: Object
+    low_resolution: Object
+        height: 306
+        url: "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s306x306/e15/11123732_405959879590340_806318064_n.jpg"
+        width: 306
+    standard_resolution: Object
+        height: 640
+        url: "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11123732_405959879590340_806318064_n.jpg"
+        width: 640
+    thumbnail: Object
+        height: 150
+        url: "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s150x150/e15/11123732_405959879590340_806318064_n.jpg"
+        width: 150
+-->
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-ui-bootstrap/ui-bootstrap-custom-0.12.1.js"></script>
+<script src="bower_components/angular-ui-bootstrap/ui-bootstrap-custom-tpls-0.12.1.js"></script>
+<script src="app.js"></script>
+<script src="view1/view1.js"></script>
+<script src="view2/view2.js"></script>
+</body>
+</html>

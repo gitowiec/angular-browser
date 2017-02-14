@@ -1,0 +1,22 @@
+
+ul.image-tags-container li {
+    border-radius: 6px;
+    margin-right: 5px;
+    margin-bottom: 6px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+ul#thumbs-grid li {
+    margin: 5px;
+}
+
+#vertical-list div {
+    padding: 10px;
+
+}
+
+div.modal-body a.glyphicon {
+    font-size: 3em;
+    text-decoration: none;
+}

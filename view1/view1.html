@@ -1,0 +1,60 @@
+<div class="row">
+    <ul id="thumbs-grid" class="list-group list-inline">
+        <li class="list-group-item" ng-repeat="img in images | orderBy:sort">
+            <img style="cursor: pointer;" ng-src="{{img.images.thumbnail.url}}"
+                 class="img-responsive center-block"
+                 ng-click="showInfo(img)" title="{{img.caption.text}}">
+            <span>{{img.id}}</span>
+        </li>
+    </ul>
+</div>
+
+
+<script type="text/ng-template" id="imageInfoModal.html">
+    <div class="modal-header">
+                <span style="float: right; width: 90px;">
+                    <img ng-src="{{image.user.profile_picture}}" class="img-circle img-responsive center-block">
+                    <span style="font-weight: bold; font-size: 11px; display: block;word-wrap: break-word;">{{image.user.username}}</span>
+                </span>
+        <h4 class="modal-title clearfix">
+            <span title="{{image.caption.text}}">{{image.caption.text | limitTo :100}}...</span>
+        </h4>
+        <span ng-if="image.user.full_name" style="font-weight: bold; display: block;word-wrap: break-word;">Pełna nazwa użytkownika: {{image.user.full_name}}</span>
+        <span style="font-weight: bold; display: block;word-wrap: break-word;">Nazwa filtru: {{image.filter}}</span>
+        <span style="font-weight: bold; display: block;word-wrap: break-word;">Liczba lajków: {{image.likes.count}}</span>
+        <span style="font-weight: bold; display: block;word-wrap: break-word;">Liczba komentarzy: {{image.comments.count}}</span>
+
+    </div>
+    <div class="modal-body container-fluid">
+        <div class="row" style="display: table;">
+            <div class="col-md-1" style="float: none;display: table-cell;vertical-align: middle;">
+                <a popover-trigger="mouseenter" popover-placement="left" popover="Przejdź do {{image.prevId}}"
+                   class="glyphicon glyphicon-backward" ng-if="image.prevId" href="#/grid/{{image.prevId}}"></a>
+            </div>
+            <div class="col-md-5" style="float: none;display: table-cell;vertical-align: top;">
+                <b>Data umieszczenia: {{image.caption.created_time|Date}}</b><br>
+                <b>Id: {{image.id}}</b>
+                <hr>
+                <img ng-click="zoomIn(image)" ng-src="{{image.images.low_resolution.url}}"
+                     class="img-responsive">
+            </div>
+            <div class="col-md-5" style="float: none;display: table-cell;vertical-align: top;">
+                <span ng-if="image.tags.length>0">TAGI: <br></span>
+                <ul class="list-inline text-primary image-tags-container">
+                    <li class="bg-info" style="border-radius: 3px;" ng-repeat="tag in image.tags">
+                        {{ tag }}
+                    </li>
+                </ul>
+                <a target="_blank" popover="W nowym oknie" popover-trigger="mouseenter" ng-href="{{image.link}}">Strona
+                    na Instagramie</a>
+            </div>
+            <div class="col-md-1" style="float: none;display: table-cell;vertical-align: middle;">
+                <a popover-trigger="mouseenter" popover-placement="right" popover="Przejdź do {{image.nextId}}"
+                   class="glyphicon glyphicon-forward" ng-if="image.nextId" href="#/grid/{{image.nextId}}"></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
